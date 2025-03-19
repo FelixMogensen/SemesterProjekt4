@@ -5,6 +5,8 @@
  * gpio provides functions for controlling the GPIO pins
  * ssi provides functions to configure the SSI (SPI)
  * pinmap defines macros that map certain pins to alternate functions
+ * 
+ * note that the PA4 (RX) and PA5 (TX) pins must be physically connected for this SPI test to function
  */
 
 #include <stdint.h>
@@ -17,10 +19,10 @@
 
 int main(void)
 {
-    // Clock set to 16 MHz from the internal oscillator
+    // Clock set to 16 MHz from the internal crystal oscillator
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
-    // Enabling peripherals for SPI and LED
+    // Enabling peripherals for SPI and LED, GPIOF used for LED
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI0);
@@ -39,6 +41,7 @@ int main(void)
     SSIConfigSetExpClk(SSI0_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
                        SSI_MODE_MASTER, 1000000, 8);
 
+    // Enabling the SSI module
     SSIEnable(SSI0_BASE);
 
     uint32_t dataToSend = 0x55; // Arbitrary test byte
@@ -65,6 +68,6 @@ int main(void)
             GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
         }
 
-        SysCtlDelay(SysCtlClockGet()/3); // Roughly 0.5 sec delay with 16 MHz clock
+        SysCtlDelay(SysCtlClockGet()/3); // 0.5 sec delay with 16 MHz clock
     }
 }
