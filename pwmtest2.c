@@ -80,7 +80,7 @@ int main(void)
     // -----------------------------------------------------------------------
     // 7) Choose your duty cycle (percentage)
     // -----------------------------------------------------------------------
-    uint8_t dutyPct = 80;  // e.g. 25%
+    uint8_t dutyPct = 40;  // e.g. 25%
     uint32_t pulseWidth = computePulseWidth(loadVal, dutyPct);
 
     // Sign-magnitude approach (Forward):
